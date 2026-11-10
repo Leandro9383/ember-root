@@ -1,0 +1,326 @@
+<!doctype html>
+<!--
+  EMBER ROOT · experimentele one-pager "Jouw gloeiuur" · v2 (meer focus op het doosje, gloeiende woorden, interactief formulier)
+  ------------------------------------------------------------
+  AFBEELDINGEN (placeholders, vervang ze door je eigen bestanden met DEZELFDE naam):
+    img/EmberRoot_Persoon_VroegeVogel.jpg   persoon op witte achtergrond, staand formaat (± 900 × 1200)
+    img/EmberRoot_Persoon_Middagpauzer.jpg  persoon op witte achtergrond, staand formaat (± 900 × 1200)
+    img/EmberRoot_Persoon_Avondmens.jpg     persoon op witte achtergrond, staand formaat (± 900 × 1200)
+    img/EmberRoot_Doos_Kraft.jpg           karton-textuur voor het 3D-doosje (naadloos, ± 512 × 512)
+    img/EmberRoot_Doos_Voorkant.png        OPTIONEEL: jouw etiket/voorkant van het doosje (staand, ± 600 × 860, transparant mag).
+                                   Bestaat dit bestand, dan vervangt het automatisch de getekende voorkant.
+  Alles werkt met relatieve paden (GitHub Pages).
+-->
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ember Root · Jouw gloeiuur</title>
+  <meta name="description" content="Ruil je koffie voor warmte. Ontdek jouw gloeiuur en ontvang een gratis proefdoosje met vier smaken.">
+  <meta name="theme-color" content="#111D17">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400;62..125,600;62..125,800;62..125,900&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700;1,6..96,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body data-smaak="gember">
+
+  <!-- hittegolf-filter voor de gloeiende woorden -->
+  <svg class="defs" width="0" height="0" aria-hidden="true">
+    <filter id="hitte" x="-10%" y="-30%" width="120%" height="160%">
+      <feTurbulence id="hitteRuis" type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="4" result="ruis"/>
+      <feDisplacementMap in="SourceGraphic" in2="ruis" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <!-- ========== VASTE LAGEN ========== -->
+  <div class="achtergrond" aria-hidden="true"><div class="ag-gloed"></div><div class="ag-korrel"></div></div>
+
+  <!-- Het product: altijd in beeld, zweeft, draait, opent -->
+  <div class="podium" aria-hidden="true">
+    <div class="doos-wrap" id="doosWrap">
+      <div class="doos-spot"></div>
+      <div class="doos-halo"></div>
+      <div class="doos-vloer"></div>
+      <div class="doos-schaduw"></div>
+      <div class="doos-ring r1"><i></i></div>
+      <div class="doos-ring r2"><i></i></div>
+      <div class="doos" id="doos">
+        <div class="vlak voor">
+          <div class="etiket-voor"><span class="kooltje"></span><span class="merk">Ember<br>Root</span></div>
+          <div class="band"><span class="band-naam">Jouw gloeiuur</span><span class="band-sub">thee · 20 zakjes</span></div>
+        </div>
+        <div class="vlak achter"><div class="etiket-voor"><span class="kooltje"></span><span class="merk">Ember<br>Root</span></div><div class="band"><span class="band-tijd">00:00</span></div></div>
+        <div class="vlak links"><div class="band"></div></div>
+        <div class="vlak rechts"><div class="band"><span class="band-tijd">00:00</span></div></div>
+        <div class="vlak bodem"></div>
+        <div class="binnen-licht"></div>
+        <div class="deksel">
+          <div class="dk dk-top"><span class="lusje"></span></div>
+          <div class="dk dk-voor"></div><div class="dk dk-achter"></div><div class="dk dk-links"></div><div class="dk dk-rechts"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="deeltjes" aria-hidden="true"></canvas>
+
+  <!-- voortgang: een kooltje dat feller gloeit -->
+  <nav class="voortgang" aria-label="Secties">
+    <div class="vg-spoor"><div class="vg-vul"></div></div>
+    <div class="vg-kooltje"></div>
+    <ol class="vg-punten"></ol>
+  </nav>
+
+  <div class="cursor" aria-hidden="true"><div class="cursor-kern"></div><div class="cursor-ring"></div></div>
+  <div class="flits" aria-hidden="true"></div>
+  <div class="schok" aria-hidden="true"></div>
+
+  <!-- ========== DE WERELD (secties schuiven onder het product door) ========== -->
+  <main class="wereld" id="wereld">
+
+    <!-- 1. HERO -->
+    <section class="sectie s-hero" data-naam="Start">
+      <p class="bovenlabel" data-in><span class="dot"></span>Ember Root · thee met warmte</p>
+      <h1 class="hero-kop"><span class="rij" data-letters>Ruil je koffie</span><span class="rij" data-letters>voor <em>warmte.</em></span></h1>
+      <div class="loopband" data-in style="--d:1.3s" aria-hidden="true">
+        <div class="lb-spoor">
+          <span>Jouw gloeiuur</span><i data-k="groen"></i><span>07:30 Green Tea &amp; Lemongrass</span><i data-k="gember"></i><span>15:00 Ginger &amp; Turmeric</span><i data-k="bosbes"></i><span>20:30 Rooibos &amp; Forest Berries</span><i data-k="honing"></i><span>21:00 Chamomile &amp; Honey</span><i></i>
+          <span>Jouw gloeiuur</span><i data-k="groen"></i><span>07:30 Green Tea &amp; Lemongrass</span><i data-k="gember"></i><span>15:00 Ginger &amp; Turmeric</span><i data-k="bosbes"></i><span>20:30 Rooibos &amp; Forest Berries</span><i data-k="honing"></i><span>21:00 Chamomile &amp; Honey</span><i></i>
+        </div>
+      </div>
+      <div class="scroll-hint" data-in style="--d:1.6s">
+        <span class="sh-muis"><span class="sh-wiel"></span></span>
+        <span class="sh-tekst">Scroll om je gloeiuur te vinden</span>
+        <span class="sh-pijlen"><i></i><i></i><i></i></span>
+      </div>
+    </section>
+
+    <!-- 2. ONS VERHAAL -->
+    <section class="sectie s-verhaal" data-naam="Verhaal">
+      <div class="verhaal-kolom">
+        <p class="bovenlabel" data-in><span class="dot"></span>N° 01 · Ons verhaal</p>
+        <h2 class="groot" data-woorden>Wij brengen je niet alleen thee, maar ook <em>rust.</em></h2>
+        <p class="lead" data-woorden>Een <strong>ember</strong> is een gloeiend kooltje: geen vlam die alles opeist, maar een rustige warmte die blijft.</p>
+        <p class="woordenboek" data-in style="--d:1.4s"><b>em·ber</b> <i>(zn.)</i> gloeiend kooltje · warmte die blijft</p>
+      </div>
+    </section>
+
+    <!-- 3. WIE BEN JIJ (swipe) -->
+    <section class="sectie s-wie" data-naam="Wie ben jij" data-vraag="persoon">
+      <div class="wie-kop">
+        <p class="bovenlabel" data-in><span class="dot"></span>N° 02 · Wie ben jij?</p>
+        <h2 class="middel" data-woorden>Swipe naar <em>jezelf.</em></h2>
+      </div>
+      <div class="carrousel" id="carrousel">
+        <article class="kaart" data-type="vroeg" data-smaak="groen">
+          <div class="kaart-foto" style="background-image:url('img/EmberRoot_Persoon_VroegeVogel.jpg')"></div>
+          <div class="kaart-tekst"><p class="kaart-tijd">07:30</p><h3>De vroege vogel</h3><p>Start de dag rustig. Houdt van fris en licht.</p></div>
+        </article>
+        <article class="kaart" data-type="middag" data-smaak="gember">
+          <div class="kaart-foto" style="background-image:url('img/EmberRoot_Persoon_Middagpauzer.jpg')"></div>
+          <div class="kaart-tekst"><p class="kaart-tijd">15:00</p><h3>De middagpauzer</h3><p>Zoekt een warm moment tussen het drukke werk.</p></div>
+        </article>
+        <article class="kaart" data-type="avond" data-smaak="honing">
+          <div class="kaart-foto" style="background-image:url('img/EmberRoot_Persoon_Avondmens.jpg')"></div>
+          <div class="kaart-tekst"><p class="kaart-tijd">21:00</p><h3>De avondmens</h3><p>Komt tot rust na een lange dag.</p></div>
+        </article>
+      </div>
+      <div class="wie-onder">
+        <button class="knop-pijl" data-richting="-1" aria-label="Vorige">&larr;</button>
+        <button class="knop-mega" id="ditBenIk" data-magneet><span>Dit ben ik</span></button>
+        <button class="knop-pijl" data-richting="1" aria-label="Volgende">&rarr;</button>
+      </div>
+      <p class="swipe-hint" data-in style="--d:1.2s">&larr; sleep of swipe &rarr;</p>
+    </section>
+
+    <!-- 4–7. VRAGEN -->
+    <section class="sectie s-vraag" data-naam="Vraag 1" data-vraag="v1">
+      <div class="vraag-kolom">
+        <p class="vraag-nr" data-in>1<span>/4</span></p>
+        <h2 class="middel" data-woorden>Hoe wil je je <em>voelen</em> na je kop thee?</h2>
+        <div class="antwoorden">
+          <button class="antwoord" data-w="G:2" data-smaak="groen" data-in style="--d:.5s"><span class="a-icoon">☀</span><span class="a-tekst">Wakker en fris</span></button>
+          <button class="antwoord" data-w="O:2" data-smaak="gember" data-in style="--d:.62s"><span class="a-icoon">✦</span><span class="a-tekst">Warm en sterk</span></button>
+          <button class="antwoord" data-w="C:2,R:1" data-smaak="honing" data-in style="--d:.74s"><span class="a-icoon">☾</span><span class="a-tekst">Zacht en rustig</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie s-vraag" data-naam="Vraag 2" data-vraag="v2">
+      <div class="vraag-kolom">
+        <p class="vraag-nr" data-in>2<span>/4</span></p>
+        <h2 class="middel" data-woorden>Welke <em>smaak</em> trekt je het meest?</h2>
+        <div class="antwoorden vier">
+          <button class="antwoord" data-w="G:3" data-smaak="groen" data-in style="--d:.5s"><span class="a-icoon">❋</span><span class="a-tekst">Citroen en kruiden</span></button>
+          <button class="antwoord" data-w="O:3" data-smaak="gember" data-in style="--d:.6s"><span class="a-icoon">✺</span><span class="a-tekst">Gember en specerijen</span></button>
+          <button class="antwoord" data-w="R:3" data-smaak="bosbes" data-in style="--d:.7s"><span class="a-icoon">●</span><span class="a-tekst">Fruit en bessen</span></button>
+          <button class="antwoord" data-w="C:3" data-smaak="honing" data-in style="--d:.8s"><span class="a-icoon">✿</span><span class="a-tekst">Honing en bloemen</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie s-vraag" data-naam="Vraag 3" data-vraag="v3">
+      <div class="vraag-kolom">
+        <p class="vraag-nr" data-in>3<span>/4</span></p>
+        <h2 class="middel" data-woorden>Hoe lang neem je de <em>tijd?</em></h2>
+        <div class="antwoorden">
+          <button class="antwoord" data-w="G:1" data-smaak="groen" data-in style="--d:.5s"><span class="a-icoon">2'</span><span class="a-tekst">2 minuten</span></button>
+          <button class="antwoord" data-w="O:1,C:1" data-smaak="gember" data-in style="--d:.62s"><span class="a-icoon">5'</span><span class="a-tekst">5 minuten</span></button>
+          <button class="antwoord" data-w="R:1,C:1" data-smaak="bosbes" data-in style="--d:.74s"><span class="a-icoon">∞</span><span class="a-tekst">Zo lang als ik wil</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie s-vraag" data-naam="Vraag 4" data-vraag="v4">
+      <div class="vraag-kolom">
+        <p class="vraag-nr" data-in>4<span>/4</span></p>
+        <h2 class="middel" data-woorden><em>Cafeïne?</em></h2>
+        <div class="antwoorden twee">
+          <button class="antwoord" data-w="G:2" data-smaak="groen" data-in style="--d:.5s"><span class="a-icoon">◐</span><span class="a-tekst">Een beetje mag</span></button>
+          <button class="antwoord" data-w="O:1,R:1,C:1" data-smaak="honing" data-in style="--d:.62s"><span class="a-icoon">○</span><span class="a-tekst">Liever niet</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. RESULTAAT -->
+    <section class="sectie s-resultaat" data-naam="Jouw gloeiuur">
+      <div class="res-kolom">
+        <p class="bovenlabel" data-in><span class="dot"></span>Jouw gloeiuur is</p>
+        <p class="res-tijd" id="resTijd"><span class="rt-u">00</span><span class="rt-dp">:</span><span class="rt-m">00</span></p>
+        <h2 class="res-smaak" id="resSmaak" data-in style="--d:1.2s">…</h2>
+        <p class="res-tekst" id="resTekst" data-in style="--d:1.45s"></p>
+        <dl class="res-zettip" data-in style="--d:1.65s">
+          <div><dt>Water</dt><dd id="resWater">–</dd></div>
+          <div><dt>Trektijd</dt><dd id="resTrek">–</dd></div>
+          <div><dt>Cafeïne</dt><dd id="resCaf">–</dd></div>
+        </dl>
+        <div class="res-knoppen" data-in style="--d:1.85s">
+          <button class="knop-mega klein" id="naarCta" data-magneet><span>Proef het gratis</span></button>
+          <button class="knop-tekst" id="opnieuw">↺ Opnieuw beginnen</button>
+        </div>
+      </div>
+      <p class="res-opstijg" id="resOpstijg" aria-hidden="true"></p>
+    </section>
+
+    <!-- 9. CTA -->
+    <section class="sectie s-cta" data-naam="Proefdoosje">
+      <div class="cta-kolom">
+        <p class="bovenlabel" data-in><span class="dot"></span>N° 03 · Gratis proefdoosje</p>
+        <h2 class="groot" data-woorden>Proef de <em>rust.</em></h2>
+        <p class="lead" data-woorden>Schrijf je in en ontvang een gratis proefdoosje met alle vier de smaken.</p>
+        <div class="formulier" data-in style="--d:.9s">
+          <!-- MAILERLITE-EMBED -->
+          <!-- Hieronder staat je huidige MailerLite-formulier al (form 203703882237346884, groep "Ember Root nieuwsbrief"), in de stijl van deze pagina.
+               Nieuwe embedcode? Vervang alles tussen MAILERLITE-EMBED en /MAILERLITE-EMBED. De opmaak in style.css werkt op de standaard MailerLite-klassen. -->
+          <div id="mlb2-48335183" class="ml-form-embedContainer ml-subscribe-form ml-subscribe-form-48335183">
+            <div class="ml-form-embedWrapper embedForm">
+              <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
+                <div class="ml-form-embedContent">
+                  <h3>Een rustig moment in je inbox</h3>
+                </div>
+                <form class="ml-block-form" novalidate action="https://assets.mailerlite.com/jsonp/2730520/forms/203703882237346884/subscribe" data-code="" method="post" target="_blank">
+                  <div class="ml-form-formContent">
+                    <div class="ml-form-fieldRow">
+                      <div class="ml-field-group ml-field-name ml-validate-required">
+                        <label for="ml-voornaam">Voornaam</label>
+                        <input id="ml-voornaam" aria-required="true" aria-describedby="fout-voornaam" type="text" class="form-control" name="fields[name]" autocomplete="given-name" placeholder=" ">
+                        <p class="ml-fout" id="fout-voornaam" aria-live="polite"></p>
+                      </div>
+                    </div>
+                    <div class="ml-form-fieldRow">
+                      <div class="ml-field-group ml-field-email ml-validate-email ml-validate-required">
+                        <label for="ml-email">E-mailadres</label>
+                        <input id="ml-email" aria-required="true" aria-describedby="fout-email" type="email" class="form-control" name="fields[email]" autocomplete="email" inputmode="email" placeholder=" ">
+                        <p class="ml-fout" id="fout-email" aria-live="polite"></p>
+                      </div>
+                    </div>
+                    <div class="ml-form-fieldRow ml-last-item">
+                      <fieldset class="ml-field-group ml-field-favoriete_moment momenten">
+                        <legend>Jouw gloeiuur <span class="optioneel">(optioneel)</span></legend>
+                        <div class="moment-keuzes">
+                          <label class="moment-keuze" data-smaak="groen">
+                            <input type="radio" name="fields[favoriete_moment]" value="Ochtend" data-tijd="07:30" data-thee="Green Tea &amp; Lemongrass">
+                            <span class="mk-tijd">07:30</span>
+                            <span class="mk-naam">Ochtend</span>
+                            <span class="mk-smaak">Green Tea &amp; Lemongrass</span>
+                          </label>
+                          <label class="moment-keuze" data-smaak="oranje">
+                            <input type="radio" name="fields[favoriete_moment]" value="Middagpauze" data-tijd="15:00" data-thee="Ginger &amp; Turmeric">
+                            <span class="mk-tijd">15:00</span>
+                            <span class="mk-naam">Middagpauze</span>
+                            <span class="mk-smaak">Ginger &amp; Turmeric</span>
+                          </label>
+                          <label class="moment-keuze" data-smaak="geel">
+                            <input type="radio" name="fields[favoriete_moment]" value="Avond" data-tijd="21:00" data-thee="Chamomile &amp; Honey">
+                            <span class="mk-tijd">21:00</span>
+                            <span class="mk-naam">Avond</span>
+                            <span class="mk-smaak">Chamomile &amp; Honey</span>
+                          </label>
+                        </div>
+                        <p class="moment-hint" aria-live="polite">Wanneer zet jij het liefst thee? Klik nog eens om je keuze te wissen.</p>
+                      </fieldset>
+                    </div>
+                  </div>
+                  <div class="ml-form-checkboxRow ml-validate-required">
+                    <label class="checkbox">
+                      <input id="ml-optin" type="checkbox" aria-describedby="fout-optin">
+                      <div class="label-description">
+                        <p>Ja, Ember Root mag me e-mails sturen over thee, zettips en nieuwe smaken. Ik kan me altijd uitschrijven via de link onderaan elke e-mail. We gebruiken je gegevens alleen voor de nieuwsbrief en je proefdoosje.</p>
+                      </div>
+                    </label>
+                    <p class="ml-fout" id="fout-optin" aria-live="polite"></p>
+                  </div>
+                  <div class="vul-meter" aria-live="polite">
+                    <div class="vm-balk"><i></i></div>
+                    <p class="vm-tekst">Je proefdoosje is voor <b>0%</b> klaar</p>
+                  </div>
+                  <input type="hidden" name="ml-submit" value="1">
+                  <div class="ml-form-embedSubmit">
+                    <button type="submit" class="primary">Ik wil mijn proefdoosje</button>
+                    <button disabled="disabled" style="display: none;" type="button" class="loading">
+                      <span class="ml-form-embedSubmitLoad"></span>
+                      <span class="sr-only">Bezig met verzenden…</span>
+                    </button>
+                  </div>
+                  <input type="hidden" name="anticsrf" value="true">
+                </form>
+              </div>
+              <div class="ml-form-successBody row-success" style="display: none" role="status">
+                <div class="ml-form-successContent" tabindex="-1">
+                  <p class="label"><span class="gloed"></span>Bijna klaar</p>
+                  <h3>Dank je wel<span data-ml-naam></span>.</h3>
+                  <p>Kijk even in je inbox: we stuurden je een bevestigingsmail. Na één klik is je proefdoosje onderweg.</p>
+                  <p class="succes-moment" data-ml-moment hidden></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script src="https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519" type="text/javascript"></script>
+          <script>fetch("https://assets.mailerlite.com/jsonp/2730520/forms/203703882237346884/takel")</script>
+          <!-- /MAILERLITE-EMBED -->
+          <p class="klein">We gebruiken je gegevens alleen voor de nieuwsbrief en je proefdoosje. Je kunt je altijd uitschrijven.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. FOOTER -->
+    <section class="sectie s-voet" data-naam="Einde">
+      <div class="loopband boven" data-in style="--d:.2s" aria-hidden="true">
+        <div class="lb-spoor">
+          <span>Jouw gloeiuur</span><i data-k="groen"></i><span>07:30 Green Tea &amp; Lemongrass</span><i data-k="gember"></i><span>15:00 Ginger &amp; Turmeric</span><i data-k="bosbes"></i><span>20:30 Rooibos &amp; Forest Berries</span><i data-k="honing"></i><span>21:00 Chamomile &amp; Honey</span><i></i>
+          <span>Jouw gloeiuur</span><i data-k="groen"></i><span>07:30 Green Tea &amp; Lemongrass</span><i data-k="gember"></i><span>15:00 Ginger &amp; Turmeric</span><i data-k="bosbes"></i><span>20:30 Rooibos &amp; Forest Berries</span><i data-k="honing"></i><span>21:00 Chamomile &amp; Honey</span><i></i>
+        </div>
+      </div>
+
+      <div class="voet-kolom">
+        <p class="voet-merk" data-letters>Ember Root</p>
+        <p class="voet-slogan" data-woorden><em>Wij brengen je niet alleen thee, maar ook rust.</em></p>
+        <p class="voet-klein" data-in style="--d:1.2s">Fictief merk, gemaakt voor de periodeopdracht Creative Automation (Arteveldehogeschool, 2026).</p>
+        <button class="knop-tekst" id="naarBoven" data-in style="--d:1.4s">↑ Terug naar het begin</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
